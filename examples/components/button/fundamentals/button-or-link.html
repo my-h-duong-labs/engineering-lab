@@ -1,0 +1,19 @@
+<!-- A link navigates. It keeps link semantics even when styled like a button. -->
+<a class="button" href="/services">Explore services</a>
+
+<!-- A button performs an action in the current context. -->
+<button type="button" id="show-settings">Open settings</button>
+
+<dialog id="settings-dialog" aria-labelledby="settings-title">
+  <h2 id="settings-title">Settings</h2>
+  <p>Settings would appear here.</p>
+  <form method="dialog"><button type="submit">Close</button></form>
+</dialog>
+
+<script>
+  const trigger = document.querySelector('#show-settings');
+  const dialog = document.querySelector('#settings-dialog');
+
+  trigger.addEventListener('click', () => dialog.showModal());
+  dialog.addEventListener('close', () => trigger.focus());
+</script>

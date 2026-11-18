@@ -1,17 +1,15 @@
-# Example title
+# Snippet template
 
-**Problem:** What concrete engineering challenge does this example address?
+**Problem:** What single question or engineering decision does this snippet illustrate?
 
-**Context:** When would this come up in a real application?
+**Context:** When might a developer use this approach?
 
-**Approach:** Summarize the solution and why it uses these platform or framework features.
+**Code:** Link to one or more short, copyable source files.
 
-**Trade-offs:** What does this intentionally not cover? When would another approach be better?
+**How to adapt it:** Mention framework requirements and what needs changing for a real app.
 
-**Accessibility:** Describe keyboard, screen reader, focus and semantic considerations, where relevant.
+**Accessibility and caveats:** What native behavior is preserved, and what does this snippet intentionally not handle?
 
-**Try it:** Exact commands to run the example or its tests.
+**Related writing:** Link to a published article when applicable.
 
-**Related writing:** Link to a published article when available.
-
-Keep examples independent. Do not copy proprietary code or maintained production components.
+Keep examples easy to read. No build system or tests are required for an isolated article snippet. Add more structure only when an example actually needs it. Do not reproduce client code or maintained production components.

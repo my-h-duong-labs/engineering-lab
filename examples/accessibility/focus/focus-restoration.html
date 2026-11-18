@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Focus restoration with a native dialog</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font: 1rem/1.5 system-ui, sans-serif; background: Canvas; color: CanvasText; max-inline-size: 40rem; margin: 0 auto; padding: 1rem; }
+    dialog { max-inline-size: min(28rem, calc(100vw - 2rem)); }
+    dialog button { margin-block-start: 0.5rem; }
+
+    /* Same visible focus rule as button/fundamentals/focus-visible.css. */
+    :focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Focus restoration</h1>
+    <p>
+      Use the keyboard: press Enter or Space on Open dialog, then try Tab, Shift+Tab, and Escape, and
+      close it with either button. Opened this way, focus returns to Open dialog when the dialog
+      closes. If you open it with a mouse, browsers differ: Safari does not focus a button when it is
+      clicked, so there may be nothing to return to. The status line below reports what happened.
+    </p>
+
+    <button type="button" id="open">Open dialog</button>
+    <p id="status" role="status"></p>
+
+    <!--
+      Native behavior, with no script for any of it: showModal() moves focus into the dialog, keeps Tab
+      inside it, makes the page behind it inert, closes on Escape, and returns focus to the element
+      that was focused before. The `autofocus` attribute picks the starting point; here, the safe choice.
+    -->
+    <dialog id="confirm" aria-labelledby="confirm-title">
+      <h2 id="confirm-title">Discard draft?</h2>
+      <p>Your changes will be lost.</p>
+      <form method="dialog">
+        <button value="keep" autofocus>Keep editing</button>
+        <button value="discard">Discard draft</button>
+      </form>
+    </dialog>
+  </main>
+
+  <script>
+    const open = document.querySelector('#open');
+    const dialog = document.querySelector('#confirm');
+    const status = document.querySelector('#status');
+
+    open.addEventListener('click', () => {
+      // returnValue is not cleared when a dialog closes. Reset it, or Escape would report the last button.
+      dialog.returnValue = '';
+      dialog.showModal();
+    });
+
+    // Demo aid only: report what happened. Real code usually just acts on the result.
+    dialog.addEventListener('close', () => {
+      const how = dialog.returnValue || 'Escape';
+      const restored = document.activeElement === open ? 'yes' : 'no';
+      status.textContent = `Dialog closed (${how}). Focus is back on Open dialog: ${restored}.`;
+    });
+  </script>
+</body>
+</html>

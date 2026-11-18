@@ -9,6 +9,7 @@ This repository is a place to explore **how and why** an implementation works: s
 | Example | Focus | Related article |
 | --- | --- | --- |
 | [Button fundamentals and four frameworks](examples/components/button/) | Native HTML/CSS/JS fundamentals and React, Angular, Vue, Web Component snippets | [A Button Is Never Just a Button](https://myduong.com/writing/a-button-is-never-just-a-button) |
+| [Focus and keyboard accessibility](examples/accessibility/focus/) | Tab order, programmatic focus, dialog focus restoration, obscured focus, and semantic navigation as standalone HTML pages | [Focus on What’s Important](https://myduong.com/writing/focus-on-whats-important) |
 
 Each example is a short, readable source file. No installation or build is required to browse or copy snippets. Future examples can follow [the example template](docs/example-template.md).
 

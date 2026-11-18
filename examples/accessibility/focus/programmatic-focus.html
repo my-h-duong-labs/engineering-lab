@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Programmatic focus: error summary</title>
+  <style>
+    :root { color-scheme: light dark; --error: #b00020; }
+    @media (prefers-color-scheme: dark) { :root { --error: #ff9aa9; } }
+    body { font: 1rem/1.5 system-ui, sans-serif; background: Canvas; color: CanvasText; max-inline-size: 40rem; margin: 0 auto; padding: 1rem; }
+    label { display: block; margin-block: 1rem 0.25rem; font-weight: 600; }
+    input { box-sizing: border-box; inline-size: 100%; padding: 0.5rem; font: inherit; }
+    input[aria-invalid="true"] { border: 3px solid var(--error); }
+    .error { display: block; margin-block-end: 0.25rem; color: var(--error); font-weight: 600; }
+    #error-summary { border: 4px solid var(--error); padding: 0.5rem 1rem; }
+    #error-summary h2 { margin-block: 0.5rem; font-size: 1.25rem; }
+
+    /* Same visible focus rule as button/fundamentals/focus-visible.css. */
+    :focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+    /* The summary is focused by script, and :focus-visible does not always match then. Always show it. */
+    #error-summary:focus { outline: 3px solid currentColor; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Create account</h1>
+    <p>
+      Press Enter in an empty field, or activate Create account. Focus moves to the error summary.
+      Tab to a message in the summary and press Enter to land in that field.
+    </p>
+
+    <!-- A destination, not a Tab stop: tabindex="-1" lets script focus it without adding it to the Tab order. -->
+    <section id="error-summary" tabindex="-1" aria-labelledby="error-summary-title" hidden>
+      <h2 id="error-summary-title">There is a problem</h2>
+      <ul id="error-list"></ul>
+    </section>
+
+    <!-- novalidate keeps this demo's own messages. The required attributes still describe the fields. -->
+    <form id="signup" novalidate>
+      <label for="name">Name</label>
+      <span id="name-error" class="error" hidden></span>
+      <input id="name" name="name" autocomplete="name" required>
+
+      <label for="email">Email</label>
+      <span id="email-error" class="error" hidden></span>
+      <input id="email" name="email" type="email" autocomplete="email" required>
+
+      <p><button type="submit">Create account</button></p>
+    </form>
+
+    <!-- Present from the start so a screen reader announces the change. Focus does not move for it. -->
+    <p id="status" role="status"></p>
+  </main>
+
+  <script>
+    const form = document.querySelector('#signup');
+    const summary = document.querySelector('#error-summary');
+    const list = document.querySelector('#error-list');
+    const status = document.querySelector('#status');
+
+    const rules = [
+      { id: 'name', message: 'Enter your name', isValid: (value) => value.trim() !== '' },
+      { id: 'email', message: 'Enter an email address, like name@example.com', isValid: (value) => /^\S+@\S+\.\S+$/.test(value.trim()) },
+    ];
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault(); // Demo only: replace with your submit request.
+      status.textContent = '';
+
+      const errors = [];
+
+      for (const rule of rules) {
+        const input = document.getElementById(rule.id);
+        const message = document.getElementById(`${rule.id}-error`);
+
+        if (rule.isValid(input.value)) {
+          input.removeAttribute('aria-invalid');
+          input.removeAttribute('aria-describedby');
+          message.hidden = true;
+        } else {
+          errors.push(rule);
+          input.setAttribute('aria-invalid', 'true');
+          input.setAttribute('aria-describedby', message.id); // The field announces its own error.
+          message.textContent = `Error: ${rule.message}`; // Not color alone.
+          message.hidden = false;
+        }
+      }
+
+      if (errors.length > 0) {
+        list.replaceChildren(
+          ...errors.map((rule) => {
+            const item = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = `#${rule.id}`;
+            link.textContent = rule.message;
+            item.append(link);
+            return item;
+          })
+        );
+        summary.hidden = false;
+        summary.focus(); // The context changed: the submit button is no longer the place to be.
+      } else {
+        summary.hidden = true;
+        // Nothing needs attention, so focus stays where it is. Announce the result without moving it.
+        status.textContent = 'Account created (demo).';
+      }
+    });
+
+    // A link to a field scrolls to it but does not focus it. Move focus to the field on purpose.
+    list.addEventListener('click', (event) => {
+      const link = event.target.closest('a');
+      if (!link) return;
+      event.preventDefault();
+      document.querySelector(link.hash).focus();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Focus obscured by a sticky header</title>
+  <style>
+    :root { color-scheme: light dark; --header-height: 4.5rem; }
+    @media (max-width: 30em) { :root { --header-height: 7rem; } }
+
+    body { margin: 0; font: 1rem/1.5 system-ui, sans-serif; background: Canvas; color: CanvasText; }
+    main { max-inline-size: 40rem; margin: 0 auto; padding: 1rem; }
+
+    /* An opaque header that stays at the top while the page scrolls. */
+    header {
+      position: sticky;
+      top: 0;
+      box-sizing: border-box;
+      block-size: var(--header-height);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.25rem 1rem;
+      padding: 0.5rem 1rem;
+      background: Canvas;
+      border-block-end: 2px solid;
+    }
+
+    /*
+      THE FIX. Browsers scroll a newly focused element "into view" without knowing the header covers
+      the top of the viewport. scroll-padding tells them to keep focused elements clear of it.
+      Both values come from one variable, so the header and the padding cannot drift apart; the extra
+      0.75rem leaves room for the outline, which sits outside the element.
+    */
+    html.fixed { scroll-padding-block-start: calc(var(--header-height) + 0.75rem); }
+
+    ol { padding-inline-start: 1.5rem; }
+    li { margin-block: 0.25rem; }
+
+    /* Same visible focus rule as button/fundamentals/focus-visible.css. */
+    :focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>Sticky header</strong>
+    <span>Mode: <strong id="mode">problem</strong></span>
+    <label><input id="fix" type="checkbox"> Reserve space for this header</label>
+  </header>
+
+  <main>
+    <h1>Focus obscured by a sticky header</h1>
+    <p>
+      <strong>Expected failure.</strong> With the box unchecked, this page is deliberately broken. Press
+      Tab about ten times to reach the middle of the list, then press Shift+Tab repeatedly. The focus
+      outline is drawn, and it is still hidden: the item slides under the header as focus moves up.
+    </p>
+    <p>
+      Then tick the box in the header and repeat. The header is unchanged. Only
+      <code>scroll-padding</code> is added, and each item now stops below it.
+    </p>
+
+    <!--
+      Each link points at its own list item, so activating it has a real destination. That is for the
+      demonstration only. A link that goes to the item it sits in is not meaningful navigation, so do not
+      copy it. Activating one scrolls that item into view, which is subject to the same header and
+      scroll-padding behavior as focus.
+    -->
+    <ol>
+      <li id="topic-1"><a href="#topic-1">Topic 1</a></li>
+      <li id="topic-2"><a href="#topic-2">Topic 2</a></li>
+      <li id="topic-3"><a href="#topic-3">Topic 3</a></li>
+      <li id="topic-4"><a href="#topic-4">Topic 4</a></li>
+      <li id="topic-5"><a href="#topic-5">Topic 5</a></li>
+      <li id="topic-6"><a href="#topic-6">Topic 6</a></li>
+      <li id="topic-7"><a href="#topic-7">Topic 7</a></li>
+      <li id="topic-8"><a href="#topic-8">Topic 8</a></li>
+      <li id="topic-9"><a href="#topic-9">Topic 9</a></li>
+      <li id="topic-10"><a href="#topic-10">Topic 10</a></li>
+      <li id="topic-11"><a href="#topic-11">Topic 11</a></li>
+      <li id="topic-12"><a href="#topic-12">Topic 12</a></li>
+      <li id="topic-13"><a href="#topic-13">Topic 13</a></li>
+      <li id="topic-14"><a href="#topic-14">Topic 14</a></li>
+      <li id="topic-15"><a href="#topic-15">Topic 15</a></li>
+      <li id="topic-16"><a href="#topic-16">Topic 16</a></li>
+      <li id="topic-17"><a href="#topic-17">Topic 17</a></li>
+      <li id="topic-18"><a href="#topic-18">Topic 18</a></li>
+      <li id="topic-19"><a href="#topic-19">Topic 19</a></li>
+      <li id="topic-20"><a href="#topic-20">Topic 20</a></li>
+      <li id="topic-21"><a href="#topic-21">Topic 21</a></li>
+      <li id="topic-22"><a href="#topic-22">Topic 22</a></li>
+      <li id="topic-23"><a href="#topic-23">Topic 23</a></li>
+      <li id="topic-24"><a href="#topic-24">Topic 24</a></li>
+      <li id="topic-25"><a href="#topic-25">Topic 25</a></li>
+    </ol>
+  </main>
+
+  <script>
+    const fix = document.querySelector('#fix');
+    const mode = document.querySelector('#mode');
+
+    fix.addEventListener('change', () => {
+      document.documentElement.classList.toggle('fixed', fix.checked);
+      mode.textContent = fix.checked ? 'fixed' : 'problem';
+    });
+  </script>
+</body>
+</html>

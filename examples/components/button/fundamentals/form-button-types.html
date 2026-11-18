@@ -1,0 +1,23 @@
+<!-- An ordinary button must not accidentally submit the form. -->
+<form id="profile-form">
+  <label for="display-name">Name</label>
+  <input id="display-name" name="displayName" required>
+
+  <button type="button" id="add-note">Add note</button>
+  <button type="submit">Save profile</button>
+</form>
+<p id="form-status" role="status"></p>
+
+<script>
+  const form = document.querySelector('#profile-form');
+  const status = document.querySelector('#form-status');
+
+  document.querySelector('#add-note').addEventListener('click', () => {
+    status.textContent = 'Add note is not a submit action.';
+  });
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault(); // Demo only: replace with your save request.
+    status.textContent = 'Profile saved (demo).';
+  });
+</script>

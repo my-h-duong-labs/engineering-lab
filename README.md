@@ -8,9 +8,9 @@ This repository is a place to explore **how and why** an implementation works: s
 
 | Example | Focus | Related article |
 | --- | --- | --- |
-| [Button component API](examples/components/button-api/) | Native semantics, keyboard activation, typed props, disabled/loading behavior, and tests | [A Button Is Never Just a Button](https://myduong.com/writing/a-button-is-never-just-a-button) |
+| [One button, four approaches](examples/components/button/) | Copyable React, Angular, Vue and Web Component snippets | [A Button Is Never Just a Button](https://myduong.com/writing/a-button-is-never-just-a-button) |
 
-Run the first example's checks with `pnpm install`, `pnpm typecheck`, and `pnpm test` (Node 22.12+). Future examples should follow [the example template](docs/example-template.md).
+Each example is a short, readable source file. No installation or build is required to browse or copy snippets. Future examples can follow [the example template](docs/example-template.md).
 
 ## What belongs here
 

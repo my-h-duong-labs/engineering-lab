@@ -1,0 +1,15 @@
+<!-- A native button already supports Tab focus, Enter, and Space. -->
+<button type="button" id="save">Save changes</button>
+<p id="save-status" role="status"></p>
+
+<script>
+  const button = document.querySelector('#save');
+  const status = document.querySelector('#save-status');
+
+  button.addEventListener('click', () => {
+    status.textContent = 'Changes saved.';
+  });
+</script>
+
+<!-- Avoid using a clickable <div> for button behavior: it lacks native
+     button semantics and keyboard activation. -->

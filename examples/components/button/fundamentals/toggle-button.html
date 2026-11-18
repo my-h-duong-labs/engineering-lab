@@ -1,0 +1,16 @@
+<!-- The label stays stable; aria-pressed exposes the on/off state. -->
+<button type="button" id="mute" aria-pressed="false">Mute</button>
+<p id="mute-status" role="status">Sound is on.</p>
+
+<script>
+  const button = document.querySelector('#mute');
+  const status = document.querySelector('#mute-status');
+
+  button.addEventListener('click', () => {
+    const isMuted = button.getAttribute('aria-pressed') === 'true';
+    const nextMuted = !isMuted;
+    button.setAttribute('aria-pressed', String(nextMuted));
+    status.textContent = nextMuted ? 'Sound is muted.' : 'Sound is on.';
+    // Connect this state to real audio behavior in an application.
+  });
+</script>

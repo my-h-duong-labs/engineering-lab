@@ -1,0 +1,8 @@
+/* Preserve a visible keyboard focus indicator. */
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
+
+/* Don't remove outlines without providing an equivalent focus indicator. */

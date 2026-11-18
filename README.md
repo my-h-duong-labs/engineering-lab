@@ -8,7 +8,7 @@ This repository is a place to explore **how and why** an implementation works: s
 
 | Example | Focus | Related article |
 | --- | --- | --- |
-| [One button, four approaches](examples/components/button/) | Copyable React, Angular, Vue and Web Component snippets | [A Button Is Never Just a Button](https://myduong.com/writing/a-button-is-never-just-a-button) |
+| [Button fundamentals and four frameworks](examples/components/button/) | Native HTML/CSS/JS fundamentals and React, Angular, Vue, Web Component snippets | [A Button Is Never Just a Button](https://myduong.com/writing/a-button-is-never-just-a-button) |
 
 Each example is a short, readable source file. No installation or build is required to browse or copy snippets. Future examples can follow [the example template](docs/example-template.md).
 

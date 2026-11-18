@@ -1,0 +1,15 @@
+<!-- The visible icon is decorative; the button gets a clear name. -->
+<button type="button" aria-label="Open settings" id="open-settings">
+  <span aria-hidden="true">⚙</span>
+</button>
+
+<p id="settings-status" role="status"></p>
+
+<script>
+  document.querySelector('#open-settings').addEventListener('click', () => {
+    document.querySelector('#settings-status').textContent =
+      'Settings action activated.';
+  });
+</script>
+
+<!-- In a real product, replace the placeholder icon with your chosen icon. -->

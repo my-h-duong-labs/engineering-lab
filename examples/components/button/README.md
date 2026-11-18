@@ -1,8 +1,12 @@
 # One button, four approaches
 
-A small collection of **copyable snippets** illustrating how React, Angular, Vue, and a native Web Component wrap an HTML button.
+A collection of **copyable snippets** supporting the article's button fundamentals and showing how React, Angular, Vue, and a native Web Component wrap an HTML button.
 
 **Purpose:** Compare framework APIs and preserve native semantics. These are teaching examples, **not** ready-made design-system components, installable packages, or standalone projects.
+
+Start with [button fundamentals](fundamentals/): native semantics, buttons versus links, icon-only labeling, form button types, visible focus, and toggle state. Those examples map directly to specific sections of the article.
+
+Then compare how different frameworks wrap a native button:
 
 | Framework | Snippet |
 | --- | --- |

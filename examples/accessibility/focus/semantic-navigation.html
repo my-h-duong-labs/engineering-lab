@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Semantic navigation</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font: 1rem/1.5 system-ui, sans-serif; background: Canvas; color: CanvasText; max-inline-size: 40rem; margin: 0 auto; padding: 1rem; }
+    section { margin-block: 2rem; }
+    .demo { border: 1px solid; padding: 0.5rem 1rem; }
+    .groups { display: flex; flex-wrap: wrap; gap: 0 2rem; }
+    h3 { margin-block-end: 0.25rem; font-size: 1rem; }
+
+    /* Same visible focus rule as button/fundamentals/focus-visible.css. */
+    :focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Semantic navigation</h1>
+    <p>
+      Both blocks look like navigation and every link works with Tab. They differ in what the markup
+      tells someone who is not reading the page visually.
+    </p>
+
+    <section>
+      <h2>Before: links that depend on the sentence around them</h2>
+      <!-- Valid HTML, but a generic container and link names that mean nothing on their own. -->
+      <div class="demo" id="before">
+        <p>Our accessibility program. <a href="#program">Learn more</a></p>
+        <p>The annual sustainability report. <a href="#report">Learn more</a></p>
+        <p>Open roles in engineering. <a href="#careers">Click here</a></p>
+        <p>Investor relations. <a href="#investors">Read more</a></p>
+      </div>
+      <h3>Link names alone</h3>
+      <ol id="before-names"></ol>
+    </section>
+
+    <section>
+      <h2>After: descriptive links in a labeled, structured landmark</h2>
+      <!--
+        A <nav> names the set of links, so it can be found by landmark. The label is "Footer", not
+        "Footer navigation": assistive technology already announces the role.
+        Headings name each group, and lists say how many links it holds.
+      -->
+      <nav class="demo" id="after" aria-label="Footer">
+        <div class="groups">
+          <div>
+            <h3>Company</h3>
+            <ul>
+              <li><a href="#program">Accessibility approach</a></li>
+              <li><a href="#report">Annual sustainability report</a></li>
+              <li><a href="#careers">Engineering careers</a></li>
+              <li><a href="#investors">Investor relations</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Support</h3>
+            <ul>
+              <li><a href="#help">Help center</a></li>
+              <li><a href="#contact">Contact support</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Legal</h3>
+            <ul>
+              <li><a href="#privacy">Privacy policy</a></li>
+              <li><a href="#terms">Terms of use</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <h3>Link names alone</h3>
+      <ol id="after-names"></ol>
+    </section>
+
+    <p>
+      Visible focus answers where you are. Descriptive names answer what a destination is. Headings,
+      lists, and landmarks answer which part of the page you are in. One does not replace the others.
+    </p>
+
+    <!-- Demo destinations, so the links above go somewhere. On a real site these are separate pages. -->
+    <section>
+      <h2>Demo destinations</h2>
+      <p>Each link above goes to one of these items, so activating it moves you here.</p>
+      <ul>
+        <li id="program">Accessibility approach</li>
+        <li id="report">Annual sustainability report</li>
+        <li id="careers">Engineering careers</li>
+        <li id="investors">Investor relations</li>
+        <li id="help">Help center</li>
+        <li id="contact">Contact support</li>
+        <li id="privacy">Privacy policy</li>
+        <li id="terms">Terms of use</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    // Demo aid: the links as a list of names, roughly what a screen reader's links list presents.
+    for (const id of ['before', 'after']) {
+      const names = [...document.querySelectorAll(`#${id} a`)].map((link) => {
+        const item = document.createElement('li');
+        item.textContent = link.textContent;
+        return item;
+      });
+      document.querySelector(`#${id}-names`).replaceChildren(...names);
+    }
+  </script>
+</body>
+</html>

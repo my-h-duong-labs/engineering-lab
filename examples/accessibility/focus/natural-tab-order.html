@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Natural tab order</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font: 1rem/1.5 system-ui, sans-serif; background: Canvas; color: CanvasText; max-inline-size: 40rem; margin: 0 auto; padding: 1rem; }
+    nav a { margin-inline-end: 1rem; }
+    label { display: block; margin-block: 0.5rem 0.25rem; }
+    .log { max-block-size: 6rem; overflow: auto; border: 1px solid; padding: 0.5rem; }
+
+    /* Same visible focus rule as button/fundamentals/focus-visible.css. */
+    :focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 id="top">Natural tab order</h1>
+    <p>
+      Press Tab and Shift+Tab. Focus follows the order of the elements in the HTML. Nothing on this
+      page sets a <code>tabindex</code> except the one scrollable region, which uses
+      <code>tabindex="0"</code> on purpose.
+    </p>
+    <!-- Demo aid only. It is not a live region, so it does not announce on every focus change. -->
+    <p>Focused: <span id="focused">nothing yet</span></p>
+
+    <!--
+      Links, buttons, and form controls are already in the tab order. No tabindex needed.
+      These links go to elements further down this page (the form and the log heading). Those targets
+      are not focusable, so they add no Tab stops. Activating a link does move the browser's starting
+      point for the next Tab to its target.
+    -->
+    <nav aria-label="Example">
+      <a href="#subscribe">Sign-up form</a>
+      <a href="#log-title">View build log</a>
+    </nav>
+
+    <form id="subscribe">
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="email">
+      <label for="plan">Plan</label>
+      <select id="plan">
+        <option>Free</option>
+        <option>Team</option>
+      </select>
+      <p><button type="submit">Subscribe</button></p>
+    </form>
+
+    <!--
+      tabindex="0" is appropriate here: the region scrolls but contains nothing focusable, so without it
+      a keyboard user cannot scroll it. Some browsers already make scrollable regions focusable; the
+      explicit value keeps behavior consistent. A focusable region needs a role and a name, or focus
+      lands on something that announces as nothing.
+    -->
+    <h2 id="log-title">Build log</h2>
+    <div class="log" role="region" aria-labelledby="log-title" tabindex="0">
+      <p>Step 1: install dependencies.</p>
+      <p>Step 2: compile.</p>
+      <p>Step 3: run the tests.</p>
+      <p>Step 4: package.</p>
+      <p>Step 5: publish.</p>
+      <p>Step 6: done.</p>
+    </div>
+
+    <p><a href="#top">Back to top</a></p>
+
+    <!--
+      Do not copy these. They are here to be recognized, not used.
+
+      Positive tabindex creates a second focus order that must be kept in sync with the DOM, and it
+      pulls those elements ahead of everything else on the page:
+        <a href="#log-title" tabindex="3">View build log</a>
+        <a href="#subscribe" tabindex="1">Sign-up form</a>
+      If the order is wrong, fix the order of the elements in the HTML.
+
+      A tabindex on a native control adds nothing:
+        <button type="button" tabindex="0">Save</button>
+
+      Making a <div> focusable does not make it a button. It would still need a role, a name,
+      Enter and Space handling, and a disabled state:
+        <div tabindex="0">Save</div>
+    -->
+  </main>
+
+  <script>
+    const focused = document.querySelector('#focused');
+
+    function nameOf(element) {
+      const labelledBy = element.getAttribute('aria-labelledby');
+      if (labelledBy) return document.getElementById(labelledBy).textContent;
+      return element.labels?.[0]?.textContent ?? element.textContent;
+    }
+
+    document.addEventListener('focusin', (event) => {
+      focused.textContent = nameOf(event.target).trim();
+    });
+
+    document.querySelector('#subscribe').addEventListener('submit', (event) => {
+      event.preventDefault(); // Demo only.
+    });
+  </script>
+</body>
+</html>

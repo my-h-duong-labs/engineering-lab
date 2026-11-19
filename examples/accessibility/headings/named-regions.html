@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Named regions</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font: 1rem/1.5 system-ui, sans-serif; background: Canvas; color: CanvasText; max-inline-size: 44rem; margin: 0 auto; padding: 1rem; }
+    section { margin-block: 1.5rem; }
+    .cards { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0; padding: 0; list-style: none; }
+    .cards li { flex: 1 1 10rem; border: 1px solid; padding: 0.5rem 0.75rem; }
+    dialog { max-inline-size: min(28rem, calc(100vw - 2rem)); }
+    table { border-collapse: collapse; inline-size: 100%; font-size: 0.875rem; }
+    th, td { border: 1px solid; padding: 0.25rem 0.5rem; text-align: start; }
+
+    /* Same visible focus rule as button/fundamentals/focus-visible.css. */
+    :focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Named regions</h1>
+    <p>
+      A visible heading can also supply the accessible name for the area it introduces. This page has one named
+      region and one dialog named the same way.
+    </p>
+
+    <!--
+      A <section> becomes a region landmark only when it has an accessible name. aria-labelledby points at the
+      visible heading, so there is no separate hidden label to keep in sync.
+    -->
+    <section aria-labelledby="recent-activity-heading">
+      <h2 id="recent-activity-heading">Recent activity</h2>
+      <ul>
+        <li>Invoice 1042 was paid.</li>
+        <li>Project Atlas was renamed.</li>
+        <li>A new member joined.</li>
+      </ul>
+    </section>
+
+    <!-- Also a <section>, but with no accessible name, so it is not exposed as a landmark. -->
+    <section>
+      <h2>When a region helps</h2>
+      <p>
+        A named region is worth it for a distinct part of the page that someone may want to jump to, like Recent
+        activity above. It is not worth it for every container. These cards are plain list items: no headings, no
+        regions. Marking up each one would add noise to landmark and heading navigation without helping anyone.
+      </p>
+      <ul class="cards">
+        <li>Storage: 62% used</li>
+        <li>Members: 14</li>
+        <li>Plan: Team</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>A dialog named by its heading</h2>
+      <p>
+        The dialog title is a visible heading, and <code>aria-labelledby</code> makes it the dialog's name. Its
+        level is <code>h2</code> here because it sits beside this page's other sections. It would be a different
+        level elsewhere, and a dialog title is not automatically an <code>h1</code>.
+      </p>
+      <p>
+        For the full focus behavior of a native dialog (entering, Escape, returning focus, and browser
+        differences) see <a href="../focus/focus-restoration.html">the focus restoration example</a>.
+      </p>
+      <p><button type="button" id="open">Delete project…</button></p>
+    </section>
+
+    <table id="readout">
+      <caption>
+        aria-labelledby references on this page, read from the DOM (a learning aid, not a full accessible name
+        computation)
+      </caption>
+      <thead>
+        <tr><th scope="col">Element</th><th scope="col">Points at</th><th scope="col">Resolves to</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <dialog id="delete-dialog" aria-labelledby="delete-project-title">
+      <h2 id="delete-project-title">Delete project?</h2>
+      <p>This action cannot be undone.</p>
+      <form method="dialog">
+        <button autofocus>Cancel</button>
+        <button value="delete">Delete project</button>
+      </form>
+    </dialog>
+  </main>
+
+  <script>
+    const dialog = document.querySelector('#delete-dialog');
+    document.querySelector('#open').addEventListener('click', () => dialog.showModal());
+
+    // Learning aid: every aria-labelledby on the page, and the text it points at. "not found" would be a bug.
+    const rows = [...document.querySelectorAll('[aria-labelledby]')].map((element) => {
+      const id = element.getAttribute('aria-labelledby');
+      const target = document.getElementById(id);
+      const cells = [`<${element.tagName.toLowerCase()}>`, `#${id}`, target ? target.textContent.trim() : 'not found'];
+      const row = document.createElement('tr');
+      row.append(...cells.map((text) => Object.assign(document.createElement('td'), { textContent: text })));
+      return row;
+    });
+
+    document.querySelector('#readout tbody').replaceChildren(...rows);
+  </script>
+</body>
+</html>

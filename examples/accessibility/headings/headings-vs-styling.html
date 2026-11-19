@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Headings versus styling</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font: 1rem/1.5 system-ui, sans-serif; background: Canvas; color: CanvasText; max-inline-size: 44rem; margin: 0 auto; padding: 1rem; }
+    .case { margin-block: 1.5rem; }
+    .case-label { margin: 0 0 0.25rem; font-weight: 700; }
+    .demo { border: 1px solid; padding: 0.75rem 1rem; }
+    .demo > :first-child { margin-block-start: 0; }
+    .demo > :last-child { margin-block-end: 0; }
+    table { border-collapse: collapse; inline-size: 100%; font-size: 0.875rem; }
+    th, td { border: 1px solid; padding: 0.25rem 0.5rem; text-align: start; }
+
+    /*
+      Looks are set by class. Two different elements get the same look, and one h2 gets a look smaller than
+      the browser's default for an h2 (usually 1.5em). Visual size says nothing about heading level.
+    */
+    .big { margin: 0; font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .small { margin: 0; font-size: 1rem; font-weight: 600; }
+    dl { margin: 0; }
+    dt { font-size: 0.875rem; }
+    dd { margin: 0; font-size: 2.5rem; font-weight: 800; line-height: 1.1; }
+
+    /* Same visible focus rule as button/fundamentals/focus-visible.css. */
+    :focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Headings versus styling</h1>
+    <p>
+      How text looks and what it means are separate. Choose a heading level from where the content sits in the
+      document, then use CSS to make it look the way the design needs.
+    </p>
+
+    <div class="case">
+      <p class="case-label">1. Looks like a heading, is not one</p>
+      <div class="demo">
+        <!-- Large and bold, but a div says nothing about structure. No heading is exposed here. -->
+        <div class="big" data-case="1">Billing information</div>
+        <p>If this introduces a section, it should be a heading element.</p>
+      </div>
+    </div>
+
+    <div class="case">
+      <p class="case-label">2. A real heading with the same look</p>
+      <div class="demo">
+        <!-- The level comes from the structure. The look comes from the class. -->
+        <h2 class="big" data-case="2">Billing information</h2>
+        <p>Same size and weight as case 1, and it is a level 2 heading that people can navigate to.</p>
+      </div>
+    </div>
+
+    <div class="case">
+      <p class="case-label">3. A level 2 heading that looks small</p>
+      <div class="demo">
+        <!-- Structurally a section heading, so it stays an h2 even though the design wants it modest. -->
+        <h2 class="small" data-case="3">Notification preferences</h2>
+        <p>It is smaller than the browser's default h2, and still a level 2 heading. Do not switch to an h4 to get this look.</p>
+      </div>
+    </div>
+
+    <div class="case">
+      <p class="case-label">4. Prominent, but not a heading</p>
+      <div class="demo">
+        <!-- A label and its value. The value is the largest thing here and is not a section title. -->
+        <dl>
+          <dt>Account balance</dt>
+          <dd data-case="4">$4,291</dd>
+        </dl>
+      </div>
+    </div>
+
+    <table id="readout">
+      <caption>What the DOM says about each case (read from the page, not a screen reader)</caption>
+      <thead>
+        <tr><th scope="col">Case</th><th scope="col">Element</th><th scope="col">Heading?</th><th scope="col">Font size</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <script>
+    // Learning aid. Looks only at the elements marked data-case, and only at their tag names.
+    const rows = [...document.querySelectorAll('[data-case]')].map((element) => {
+      const tag = element.tagName.toLowerCase();
+      const isHeading = /^h[1-6]$/.test(tag);
+      const cells = [
+        element.dataset.case,
+        `<${tag}>`,
+        isHeading ? `yes, level ${tag[1]}` : 'no',
+        getComputedStyle(element).fontSize,
+      ];
+      const row = document.createElement('tr');
+      row.append(...cells.map((text) => Object.assign(document.createElement('td'), { textContent: text })));
+      return row;
+    });
+
+    document.querySelector('#readout tbody').replaceChildren(...rows);
+  </script>
+</body>
+</html>

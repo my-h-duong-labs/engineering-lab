@@ -82,7 +82,7 @@ Use neutral colours (blue, lightgrey). Do not add an informational badge that re
 
 ## Status in this repository
 
-Checked on 2026-11-18. Engineering Lab has no workflows, no workflow runs, no package or test configuration, no coverage reporting, no automated accessibility checks, and no license file, so no badge is displayed. Update this table when any of that changes.
+Checked on 2026-11-18. Engineering Lab has no workflows, no workflow runs, no package or test configuration, no coverage reporting, and no automated accessibility checks. It has an MIT LICENSE file, but no badge is displayed yet (see the License row). Update this table when any of that changes.
 
 | Badge | Status | What it would take |
 | --- | --- | --- |
@@ -90,7 +90,7 @@ Checked on 2026-11-18. Engineering Lab has no workflows, no workflow runs, no pa
 | Coverage | Not applicable | The examples are standalone snippets with no test suite, and a coverage tool needs code under test. Do not add one just to produce a number |
 | Accessibility checks | Not supported | A dedicated workflow that loads the HTML examples in a browser and runs axe-core. Today those checks were run by scripts kept outside this repository when the focus and heading examples were written, and are summarized in their READMEs; the button snippets record none |
 | Package version | Not applicable | Nothing here is published as a package |
-| License | Not supported | A LICENSE file chosen by the owner. The snippets invite copying, so a license is worth deciding on |
+| License | Supported once merged | A LICENSE file now exists. GitHub detects a repository's license on the default branch, so the badge renders "license: MIT" only after the file is on `main`. Check that it does, then add it |
 | Informational | Not needed | The README already states that the examples are educational and not production code |
 
 ## Adapting this to other repositories

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Heading hierarchy comparison</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font: 1rem/1.5 system-ui, sans-serif; background: Canvas; color: CanvasText; max-inline-size: 44rem; margin: 0 auto; padding: 1rem; }
+    .badge { display: inline-block; padding: 0.1rem 0.5rem; border: 2px solid; font-size: 0.875rem; font-weight: 700; }
+    .demo { border: 1px solid; padding: 0.5rem 1rem 1rem; }
+    .demo p { margin: 0.25rem 0; }
+    .headings { margin: 0.75rem 0 0; padding: 0; list-style: none; font-family: ui-monospace, monospace; font-size: 0.875rem; }
+    .headings li { padding-inline-start: calc((var(--level) - 1) * 1.25rem); }
+
+    /*
+      Presentation is set by class, never by tag, so both versions look the same. The heading level
+      does not change how any of this renders; it changes what the document says about itself.
+    */
+    .page-title, .section-title, .subsection-title { margin: 0.75rem 0 0.25rem; line-height: 1.25; font-weight: 700; }
+    .page-title { font-size: 1.75rem; margin-block-start: 0.5rem; }
+    .section-title { font-size: 1.25rem; }
+    .subsection-title { font-size: 1rem; font-weight: 600; }
+
+    /* Same visible focus rule as button/fundamentals/focus-visible.css. */
+    :focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Heading hierarchy comparison</h1>
+    <p>
+      The same small settings page twice. Both look alike because the styling comes from classes. Only the
+      heading levels differ, so they tell a different story about how the page is organized.
+    </p>
+    <p>
+      <strong>The heading lists below are a learning aid, not a screen reader.</strong> They are read from each
+      version's own DOM and show only element levels. Screen readers present headings in their own ways, and
+      some offer heading lists you can jump around.
+    </p>
+
+    <h2>Before <span class="badge">Intentionally problematic: do not copy</span></h2>
+    <!-- Deliberately inconsistent levels. Visual styling makes the page look organized anyway. -->
+    <div class="demo" id="before">
+      <h1 class="page-title">Settings</h1>
+      <h3 class="section-title">Profile</h3>
+      <p>Name and email address.</p>
+      <h2 class="section-title">Security</h2>
+      <h4 class="subsection-title">Password</h4>
+      <p>Change your password.</p>
+      <h2 class="section-title">Notifications</h2>
+      <h4 class="subsection-title">Email</h4>
+      <p>Choose which emails you receive.</p>
+      <h1 class="section-title">Delete account</h1>
+      <p>Permanently remove your account.</p>
+    </div>
+    <ol class="headings" id="before-headings" aria-label="Heading levels in the Before version"></ol>
+    <p id="before-summary"></p>
+
+    <h2>After <span class="badge">Corrected structure</span></h2>
+    <!-- Levels follow the relationships: sections are peers, Password and Email belong inside theirs. -->
+    <div class="demo" id="after">
+      <h1 class="page-title">Settings</h1>
+      <h2 class="section-title">Profile</h2>
+      <p>Name and email address.</p>
+      <h2 class="section-title">Security</h2>
+      <h3 class="subsection-title">Password</h3>
+      <p>Change your password.</p>
+      <h2 class="section-title">Notifications</h2>
+      <h3 class="subsection-title">Email</h3>
+      <p>Choose which emails you receive.</p>
+      <h2 class="section-title">Delete account</h2>
+      <p>Permanently remove your account.</p>
+    </div>
+    <ol class="headings" id="after-headings" aria-label="Heading levels in the After version"></ol>
+    <p id="after-summary"></p>
+
+    <h2>Notes</h2>
+    <p>
+      A jump deeper by more than one level, like Settings straight to a level 3, is something to look at. It is
+      guidance to avoid where possible, not an automatic WCAG failure, and it says nothing about whether the
+      heading text is useful. A page does not need exactly one <code>h1</code> to be valid HTML either; this
+      example uses one because it gives the page a clear top-level subject.
+    </p>
+    <p>
+      Because both versions share this file, this page's own outline includes both of them. In a real page there
+      would be one outline.
+    </p>
+  </main>
+
+  <script>
+    // Each query is scoped to one example container, so this page's own headings are never counted.
+    for (const id of ['before', 'after']) {
+      const headings = [...document.querySelector(`#${id}`).querySelectorAll('h1, h2, h3, h4, h5, h6')];
+      let deepJumps = 0;
+
+      const items = headings.map((heading, index) => {
+        const level = Number(heading.tagName[1]);
+        if (index > 0 && level - Number(headings[index - 1].tagName[1]) > 1) deepJumps += 1;
+
+        const item = document.createElement('li');
+        item.style.setProperty('--level', level);
+        item.textContent = `h${level}  ${heading.textContent}`;
+        return item;
+      });
+
+      document.querySelector(`#${id}-headings`).replaceChildren(...items);
+      document.querySelector(`#${id}-summary`).textContent = `${headings.length} headings. Steps deeper by more than one level: ${deepJumps}.`;
+    }
+  </script>
+</body>
+</html>

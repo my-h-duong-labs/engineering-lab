@@ -55,6 +55,10 @@ This lab is **not** a second component library or a source of production code fo
 - [README template](docs/readme-template.md) — a short starting point for project READMEs.
 - [Badge conventions](docs/badge-conventions.md) — when a badge is backed by evidence and when it is not.
 
+## License
+
+Released under the [MIT License](LICENSE).
+
 ---
 
 Maintained by [My Duong](https://github.com/my-h-duong). Explore more at [myduong.com](https://myduong.com).
